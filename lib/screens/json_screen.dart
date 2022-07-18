@@ -1,20 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../components/photo_card_widget.dart';
 import '../models/photos.dart';
 
 class JsonScreen extends StatefulWidget {
-  JsonScreen({Key? key}) : super(key: key);
+  const JsonScreen({Key? key}) : super(key: key);
 
   @override
   State<JsonScreen> createState() => _JsonScreenState();
 }
 
 class _JsonScreenState extends State<JsonScreen> {
-  List<Map<String, dynamic>> photos = [];
+
+  Map<String, dynamic> photos = {};
   bool isLoading = false;
 
   @override
@@ -30,26 +32,36 @@ class _JsonScreenState extends State<JsonScreen> {
     setState(() {
       isLoading = true;
     });
-    photos = await _getPhotos();
+    loadJson();
     update();
     setState(() {
       isLoading = false;
     });
   }
 
-  Future<List<Map<String, dynamic>>> _getPhotos() async {
-    if (context != null) {
-      String datas = await DefaultAssetBundle.of(context)
-          .loadString("assets/json/hits.json");
-      List<Map<String, dynamic>> results =
-          ((jsonDecode(datas) as List).cast<Map<String, dynamic>>().toList());
-      return results;
-    } else {
-      return Future.delayed(const Duration(milliseconds: 1000), _getPhotos);
-    }
+  // Future<Map<String, dynamic>> _getPhotos() async {
+  //   if (context != null) {
+  //     String datas = await DefaultAssetBundle.of(context).loadString(
+  //         "assets/json/hits.json");
+  //     List<Map<String, dynamic>> results = ((json.decode(datas) as List)
+  //         .cast<Map<String, dynamic>>().toList());
+  //     return results;
+  //    } else {
+  //      return Future.delayed(const Duration(milliseconds: 1000), _getPhotos);
+  //    }
+  // }
+
+  loadJson() async {
+    // String data = await rootBundle.loadString('assets/json/hits.json');
+    // photos = json.decode(data);
+    // print(photos);
+   photos = await rootBundle
+        .loadStructuredData('assets/json/hits.json', (String s) async {
+      return json.decode(s);
+    });
   }
 
-  Widget buildNotes() => StaggeredGridView.countBuilder(
+  Widget buildPhotos() => StaggeredGridView.countBuilder(
       padding: const EdgeInsets.all(8),
       // physics: const NeverScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
@@ -59,7 +71,8 @@ class _JsonScreenState extends State<JsonScreen> {
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,
       itemBuilder: (context, index) {
-        Map<String, dynamic> photo = photos[index] as Map<String, dynamic>;
+
+        Map<String, dynamic> photo = photos[index];
 
         return PhotoCardWidget(
             id: photo["hits"][index]["id"],
@@ -85,7 +98,7 @@ class _JsonScreenState extends State<JsonScreen> {
             )
           : (isLoading == false && photos.isEmpty)
               ? const Center(child: Text('No Data'))
-              : buildNotes(),
+              : buildPhotos(),
     );
   }
 }

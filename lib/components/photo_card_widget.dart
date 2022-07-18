@@ -20,42 +20,65 @@ class PhotoCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final minHeight = getMinHeight(index);
-    return Card(
-      child: Container(
-        constraints: BoxConstraints(minHeight: minHeight),
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Hero(
-              tag: id,
-              child: Image.network(imageUrl, fit: BoxFit.cover),
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.width * 0.3,
+          decoration: BoxDecoration(
+            color: Colors.white60,
+          ),
+          child: TextField(
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none,
+              ),
+              suffixIcon: Icon(Icons.search),
+              hintText: '검색',
             ),
-            const Spacer(),
-            Text(totalHist.toString()),
-            const SizedBox(height: 5),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  downloads.toString(),
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                Text(
-                  downloads.toString(),
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                )
-              ],
-            ),
-          ],
+          ),
         ),
-      ),
+        Card(
+          child: Container(
+            constraints: BoxConstraints(minHeight: minHeight),
+            padding: const EdgeInsets.all(8),
+            child: Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Hero(
+                    tag: id,
+                    child: Image.network(imageUrl, fit: BoxFit.cover),
+                  ),
+                  const Spacer(),
+                  Text(totalHist.toString()),
+                  const SizedBox(height: 5),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        downloads.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      const Spacer(),
+                      Text(
+                        downloads.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -64,9 +87,9 @@ class PhotoCardWidget extends StatelessWidget {
       case 0:
         return 100;
       case 1:
-        return 150;
+        return 120;
       case 2:
-        return 150;
+        return 130;
       case 3:
         return 100;
       default:
