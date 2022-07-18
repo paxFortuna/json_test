@@ -19,7 +19,9 @@ class PhotoCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final minHeight = getMinHeight(index);
+
     return Column(
       children: [
         Container(

@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../components/photo_card_widget.dart';
-import '../models/photos.dart';
+import '../repository/repository.dart';
 
 class JsonScreen extends StatefulWidget {
   const JsonScreen({Key? key}) : super(key: key);
@@ -36,28 +33,6 @@ class _JsonScreenState extends State<JsonScreen> {
     update();
     setState(() {
       isLoading = false;
-    });
-  }
-
-  // Future<Map<String, dynamic>> _getPhotos() async {
-  //   if (context != null) {
-  //     String datas = await DefaultAssetBundle.of(context).loadString(
-  //         "assets/json/hits.json");
-  //     List<Map<String, dynamic>> results = ((json.decode(datas) as List)
-  //         .cast<Map<String, dynamic>>().toList());
-  //     return results;
-  //    } else {
-  //      return Future.delayed(const Duration(milliseconds: 1000), _getPhotos);
-  //    }
-  // }
-
-  loadJson() async {
-    // String data = await rootBundle.loadString('assets/json/hits.json');
-    // photos = json.decode(data);
-    // print(photos);
-   photos = await rootBundle
-        .loadStructuredData('assets/json/hits.json', (String s) async {
-      return json.decode(s);
     });
   }
 
