@@ -30,17 +30,19 @@ class _JsonScreenState extends State<JsonScreen> {
     isLoading = true;
     update();
 
-    mapFromJson = await loadJson();
+    // mapFromJson = await loadJson();
+    await loadJson();
     update();
 
     isLoading = false;
     update();
   }
 
-  loadJson() async {
+  Future<Map<String, dynamic>>loadJson() async {
     // 빙법1
     String data = await rootBundle.loadString('assets/json/hits.json');
     mapFromJson = jsonDecode(data);
+    return mapFromJson;
     print(mapFromJson);
   }
 
