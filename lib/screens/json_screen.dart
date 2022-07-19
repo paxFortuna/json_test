@@ -12,7 +12,6 @@ class JsonScreen extends StatefulWidget {
 }
 
 class _JsonScreenState extends State<JsonScreen> {
-
   Map<String, dynamic> mapFromJson = {};
 
   List<Map<String, dynamic>> hits = [];
@@ -31,7 +30,7 @@ class _JsonScreenState extends State<JsonScreen> {
     isLoading = true;
     update();
 
-    mapFromJson= await loadJson();
+    mapFromJson = await loadJson();
     update();
 
     isLoading = false;
@@ -47,7 +46,6 @@ class _JsonScreenState extends State<JsonScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     hits = mapFromJson['hits'];
 
     return Scaffold(
@@ -67,27 +65,28 @@ class _JsonScreenState extends State<JsonScreen> {
             ),
             Expanded(
               child: GridView.builder(
-                itemCount: hits.length, //item 개수
+                itemCount: hits.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
-                  childAspectRatio: 1, //item 의 가로 1, 세로 2 의 비율
+                  crossAxisCount: 3,
+                  childAspectRatio: 1,
                 ),
                 itemBuilder: (BuildContext context, int index) {
 
-                  Map<String, dynamic> image = hits[index];
+                  Map<String, dynamic> photo = hits[index];
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(15),
                       child: Image.network(
-                        image['previewURL'],
+                        photo['previewURL'],
                         fit: BoxFit.cover,
                       ),
                     ),
                   );
-                }, //item 의 반목문 항목 형성
-              ),),
+                },
+              ),
+            ),
           ],
         ),
       ),
