@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Photos {
   int total;
   int totalHits;
@@ -28,22 +26,26 @@ class Hits {
   int id;
   String previewUrl;
   int downloads;
+  String tags;
 
   Hits({
     required this.id,
     required this.previewUrl,
     required this.downloads,
+    required this.tags,
   });
 
   factory Hits.fromJson(Map<String, dynamic> json) => Hits(
       id: json["id"] as int,
       previewUrl: json["previewUrl"] as String,
       downloads: json["downloads"] as int,
+      tags: json["tags"] as String,
   );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "previewUrl": previewUrl,
         "downloads": downloads,
+        "tags": tags,
       };
 }

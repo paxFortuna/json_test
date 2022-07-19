@@ -14,6 +14,7 @@ class JsonScreen extends StatefulWidget {
 class _JsonScreenState extends State<JsonScreen> {
 
   Map<String, dynamic> photos = {};
+  List<Map<String, dynamic>> hits = [];
   bool isLoading = false;
 
   @override
@@ -25,16 +26,17 @@ class _JsonScreenState extends State<JsonScreen> {
 
   void update() => setState(() {});
 
-  Future initData() async {
-    setState(() {
-      isLoading = true;
-    });
-    loadJson();
+  void initData() async {
+    isLoading = true;
     update();
-    setState(() {
-      isLoading = false;
-    });
+
+    await loadJson();
+    update();
+
+    isLoading = false;
+    update();
   }
+
 
   Widget buildPhotos() => StaggeredGridView.countBuilder(
       padding: const EdgeInsets.all(8),
@@ -47,14 +49,17 @@ class _JsonScreenState extends State<JsonScreen> {
       crossAxisSpacing: 4,
       itemBuilder: (context, index) {
 
-        Map<String, dynamic> photo = photos[index];
+        hits = photos['hits'];
+        Map<String, dynamic> image = hits[index];
 
         return PhotoCardWidget(
-            id: photo["hits"][index]["id"],
-            downloads: photo["hits"][index]["downloads"],
-            imageUrl: photo["hits"][index]["imageUrl"],
-            totalHist: photo["totalHits"][index],
-            index: index);
+            index: index,
+            data: photos[index],
+            // id: image['id'],
+            // downloads: image["downloads"],
+            // imageUrl: image["imageUrl"],
+            // totalHist: photos["totalHits"][index],
+        );
       });
 
   @override

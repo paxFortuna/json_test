@@ -4,18 +4,19 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
+Map<String, dynamic> photos = {};
 loadJson() async {
   //방법 2
-  Map<String, dynamic> photos = await rootBundle
-      .loadStructuredData('assets/json/hits.json', (String s) async {
-    return json.decode(s);
-  });
+  // Map<String, dynamic> photos = await rootBundle
+  //     .loadStructuredData('assets/json/hits.json', (String s) async {
+  //   return json.decode(s);
+  // });
 
 
   // 빙법1
-  // String data = await rootBundle.loadString('assets/json/hits.json');
-  // photos = json.decode(data);
-  // print(photos);
+  String data = await rootBundle.loadString('assets/json/hits.json');
+  photos = json.decode(data);
+  print(photos);
 
 // Future<Map<String, dynamic>> _getPhotos() async {
 //   if (context != null) {

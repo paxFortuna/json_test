@@ -1,87 +1,110 @@
 import 'package:flutter/material.dart';
 import 'package:json_exam/models/photos.dart';
 
-class PhotoCardWidget extends StatelessWidget {
-  const PhotoCardWidget({
+class PhotoCardWidget extends StatefulWidget {
+  PhotoCardWidget({
     Key? key,
-    required this.id,
-    required this.downloads,
-    required this.imageUrl,
-    required this.totalHist,
+    required this.data,
     required this.index,
+    // required this.id,
+    // required this.downloads,
+    // required this.imageUrl,
+    // required this.totalHist,
   }) : super(key: key);
 
-  final int id;
-  final int downloads;
-  final String imageUrl;
-  final int totalHist;
+  final Photos data;
   final int index;
+  // final int id;
+  // final int downloads;
+  // final String imageUrl;
+  // final int totalHist;
+
+
+  @override
+  State<PhotoCardWidget> createState() => _PhotoCardWidgetState();
+}
+
+class _PhotoCardWidgetState extends State<PhotoCardWidget> {
+  Widget _genTextFields() {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white60,
+      ),
+      child: TextField(
+        decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide.none,
+          ),
+          suffixIcon: const Icon(Icons.search),
+          hintText: '검색',
+        ),
+      ),
+    );
+  }
+
+  Widget _cardWidget() {
+    final minHeight = getMinHeight(widget.index);
+    return Card(
+      child: Container(
+        constraints: BoxConstraints(minHeight: minHeight),
+        padding: const EdgeInsets.all(8),
+        child: Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Hero(
+                tag: widget.data.hits.id,
+                child: Image.network(widget.data.hits.previewUrl, fit: BoxFit.cover),
+              ),
+              const SizedBox(height: 10),
+              Text(widget.data.hits.tags),
+              const SizedBox(height: 5),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    widget.data.hits.downloads.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(),
+                  Text(
+                    widget.data.hits.downloads.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    final minHeight = getMinHeight(index);
-
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.width * 0.3,
-          decoration: BoxDecoration(
-            color: Colors.white60,
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.data.hits.id.toString(),
+            style: const TextStyle(fontSize: 20),
           ),
-          child: TextField(
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none,
-              ),
-              suffixIcon: Icon(Icons.search),
-              hintText: '검색',
-            ),
-          ),
+          centerTitle: true,
         ),
-        Card(
-          child: Container(
-            constraints: BoxConstraints(minHeight: minHeight),
-            padding: const EdgeInsets.all(8),
-            child: Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Hero(
-                    tag: id,
-                    child: Image.network(imageUrl, fit: BoxFit.cover),
-                  ),
-                  const Spacer(),
-                  Text(totalHist.toString()),
-                  const SizedBox(height: 5),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        downloads.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      const Spacer(),
-                      Text(
-                        downloads.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _genTextFields(),
+            const SizedBox(height: 10),
+            _cardWidget(),
+          ],
+        ));
   }
 
   double getMinHeight(int index) {
