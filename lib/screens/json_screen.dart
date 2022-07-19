@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../repository/repository.dart';
 
 class JsonScreen extends StatefulWidget {
   const JsonScreen({Key? key}) : super(key: key);
@@ -43,7 +42,6 @@ class _JsonScreenState extends State<JsonScreen> {
     String data = await rootBundle.loadString('assets/json/hits.json');
     mapFromJson = jsonDecode(data);
     return mapFromJson;
-    print(mapFromJson);
   }
 
   @override
