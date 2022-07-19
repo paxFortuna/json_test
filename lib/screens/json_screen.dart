@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'dart:convert';
 
-import '../components/photo_card_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../repository/repository.dart';
 
 class JsonScreen extends StatefulWidget {
@@ -13,7 +13,8 @@ class JsonScreen extends StatefulWidget {
 
 class _JsonScreenState extends State<JsonScreen> {
 
-  Map<String, dynamic> photos = {};
+  Map<String, dynamic> mapFromJson = {};
+
   List<Map<String, dynamic>> hits = [];
   bool isLoading = false;
 
@@ -30,55 +31,66 @@ class _JsonScreenState extends State<JsonScreen> {
     isLoading = true;
     update();
 
-    await loadJson();
+    mapFromJson= await loadJson();
     update();
 
     isLoading = false;
     update();
   }
 
-
-  Widget buildPhotos() => StaggeredGridView.countBuilder(
-      padding: const EdgeInsets.all(8),
-      // physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      itemCount: photos.length,
-      staggeredTileBuilder: (index) => const StaggeredTile.fit(2),
-      crossAxisCount: 4,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      itemBuilder: (context, index) {
-
-        hits = photos['hits'];
-        Map<String, dynamic> image = hits[index];
-
-        return PhotoCardWidget(
-            index: index,
-            data: photos[index],
-            // id: image['id'],
-            // downloads: image["downloads"],
-            // imageUrl: image["imageUrl"],
-            // totalHist: photos["totalHits"][index],
-        );
-      });
+  loadJson() async {
+    // 빙법1
+    String data = await rootBundle.loadString('assets/json/hits.json');
+    mapFromJson = jsonDecode(data);
+    print(mapFromJson);
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    hits = mapFromJson['hits'];
+
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'JsonPhotos',
-          style: TextStyle(fontSize: 15),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 25),
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                hintText: 'Search',
+                suffixIcon: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.search),
+                ),
+              ),
+            ),
+            Expanded(
+              child: GridView.builder(
+                itemCount: hits.length, //item 개수
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
+                  childAspectRatio: 1, //item 의 가로 1, 세로 2 의 비율
+                ),
+                itemBuilder: (BuildContext context, int index) {
+
+                  Map<String, dynamic> image = hits[index];
+
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: Image.network(
+                        image['previewURL'],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                }, //item 의 반목문 항목 형성
+              ),),
+          ],
         ),
       ),
-      body: (isLoading == true)
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : (isLoading == false && photos.isEmpty)
-              ? const Center(child: Text('No Data'))
-              : buildPhotos(),
     );
   }
 }
