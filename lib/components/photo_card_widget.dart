@@ -44,46 +44,33 @@ class _PhotoCardWidgetState extends State<PhotoCardWidget> {
   }
 
   Widget _cardWidget() {
-    final minHeight = getMinHeight(widget.index);
-    return Card(
-      child: Container(
-        constraints: BoxConstraints(minHeight: minHeight),
-        padding: const EdgeInsets.all(8),
-        child: Expanded(
+    // final minHeight = getMinHeight(widget.index);
+    return Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Hero(
-                tag: widget.data.hits.id,
-                child: Image.network(widget.data.hits.previewUrl, fit: BoxFit.cover),
+                tag: widget.data.id,
+                child: Image.network(widget.data.previewURL, fit: BoxFit.cover),
               ),
               const SizedBox(height: 10),
-              Text(widget.data.hits.tags),
+              Text(widget.data.tags),
               const SizedBox(height: 5),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    widget.data.hits.downloads.toString(),
+                    widget.data.downloads.toString(),
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
-                  Text(
-                    widget.data.hits.downloads.toString(),
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                    ),
-                  )
                 ],
               ),
             ],
           ),
-        ),
-      ),
     );
   }
 
@@ -92,7 +79,7 @@ class _PhotoCardWidgetState extends State<PhotoCardWidget> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            widget.data.hits.id.toString(),
+            widget.data.id.toString(),
             style: const TextStyle(fontSize: 20),
           ),
           centerTitle: true,
@@ -106,19 +93,19 @@ class _PhotoCardWidgetState extends State<PhotoCardWidget> {
           ],
         ));
   }
-
-  double getMinHeight(int index) {
-    switch (index % 4) {
-      case 0:
-        return 100;
-      case 1:
-        return 120;
-      case 2:
-        return 130;
-      case 3:
-        return 100;
-      default:
-        return 100;
-    }
-  }
+  //
+  // double getMinHeight(int index) {
+  //   switch (index % 4) {
+  //     case 0:
+  //       return 100;
+  //     case 1:
+  //       return 120;
+  //     case 2:
+  //       return 130;
+  //     case 3:
+  //       return 100;
+  //     default:
+  //       return 100;
+  //   }
+  // }
 }
