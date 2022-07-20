@@ -11,9 +11,9 @@ class JsonScreen extends StatefulWidget {
 }
 
 class _JsonScreenState extends State<JsonScreen> {
-  Map<String, dynamic>? mapFromJson;
+  Map<String, dynamic> mapFromJson= {};
 
-  List<Map<String, dynamic>?>? hits = [];
+  List<Map<String, dynamic>> hits = [];
   bool isLoading = false;
 
   @override
@@ -40,15 +40,19 @@ class _JsonScreenState extends State<JsonScreen> {
   Future<Map<String, dynamic>?> loadJson() async {
     // 빙법1
     String data = await rootBundle.loadString('assets/json/hits.json');
-    mapFromJson = jsonDecode(data);
-    return mapFromJson!;
+    if (data.isNotEmpty) {
+      mapFromJson = jsonDecode(data);
+    }
+    return throw Exception('Failed');
 
   }
 
   @override
   Widget build(BuildContext context) {
-    hits = mapFromJson!['hits'];
-
+    if(mapFromJson.isEmpty) {
+      hits = mapFromJson['hits'];
+      throw Exception('No data');
+    }
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 25),
@@ -66,14 +70,14 @@ class _JsonScreenState extends State<JsonScreen> {
             ),
             Expanded(
               child: GridView.builder(
-                itemCount: hits!.length,
+                itemCount: hits.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 1,
                 ),
                 itemBuilder: (BuildContext context, int index) {
 
-                  Map<String, dynamic> photo = hits![index]!;
+                  Map<String, dynamic> photo = hits[index];
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
