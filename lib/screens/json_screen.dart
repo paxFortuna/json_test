@@ -13,7 +13,7 @@ class JsonScreen extends StatefulWidget {
 class _JsonScreenState extends State<JsonScreen> {
   Map<String, dynamic> mapFromJson= {};
 
-  List<Map<String, dynamic>> hits = [];
+  List<Map<String, dynamic>?> hits = [];
   bool isLoading = false;
 
   @override
@@ -37,11 +37,12 @@ class _JsonScreenState extends State<JsonScreen> {
     update();
   }
 
-  Future<Map<String, dynamic>?> loadJson() async {
+  Future<Map<String, dynamic>> loadJson() async {
     // 빙법1
     String data = await rootBundle.loadString('assets/json/hits.json');
     if (data.isNotEmpty) {
       mapFromJson = jsonDecode(data);
+      return mapFromJson;
     }
     return throw Exception('Failed');
 
@@ -77,7 +78,7 @@ class _JsonScreenState extends State<JsonScreen> {
                 ),
                 itemBuilder: (BuildContext context, int index) {
 
-                  Map<String, dynamic> photo = hits[index];
+                  Map<String, dynamic> photo = hits[index]!;
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
